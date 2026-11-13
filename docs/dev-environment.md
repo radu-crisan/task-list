@@ -8,26 +8,36 @@ give both versions.
 
 ## Requirements
 
-Docker with Compose and Git. Node 24 and Yarn 4 (via corepack) come from the
-image in .docker/; do not install them on the host.
+Docker with Compose and Git. Node 24 and Yarn 4 (via corepack) exist only in
+the image built from .docker/; do not install them on the host.
 
 ## Start
 
 ```
-docker compose run --rm --service-ports app sh
+docker compose up -d --build
 ```
 
-Inside the container, run the dev server once package.json has scripts
-(Vite is not set up yet; the human does it). It will open at
-http://localhost:5173, the port compose.yaml publishes.
+The container `app` stays running in the background with the project mounted
+at /app. Address of the dev server, once Vite is set up: http://localhost:5173
+(the port compose.yaml publishes).
 
 ## Stop
-
-Press Ctrl+C, then `exit`. If a container is left over:
 
 ```
 docker compose down
 ```
+
+## Run a command
+
+Node and Yarn run only in the container, through `docker compose exec app`:
+
+```
+docker compose exec app yarn install
+docker compose exec app yarn <script>
+```
+
+Use `docker compose exec -T app ...` in scripts without a terminal.
+package.json has no scripts yet.
 
 ## Common problems
 
